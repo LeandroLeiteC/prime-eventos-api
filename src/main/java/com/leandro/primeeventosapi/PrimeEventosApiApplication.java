@@ -12,6 +12,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.io.File;
+
 @SpringBootApplication
 public class PrimeEventosApiApplication {
 
@@ -21,13 +23,16 @@ public class PrimeEventosApiApplication {
     private PasswordEncoder encoder;
 
     @Value("${admin.nome}")
-    String nome;
+    private String nome;
 
     @Value("${admin.email}")
-    String email;
+    private String email;
 
     @Value("${admin.password}")
-    String password;
+    private String password;
+
+    @Value("${evento.foto}")
+    private String PATH_FOTO;
 
     @Bean
     public CommandLineRunner run(){
@@ -52,7 +57,12 @@ public class PrimeEventosApiApplication {
             System.out.println("   | Email: " + usuario.getEmail());
             System.out.println("   | Senha: *****" );
             System.out.println("   =====================================");
+
+            File dir = new File(String.valueOf(PATH_FOTO));
+            dir.mkdir();
         };
+
+
     }
 
     public static void main(String[] args) {
