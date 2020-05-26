@@ -7,10 +7,13 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class JwtService {
@@ -25,7 +28,12 @@ public class JwtService {
         Long expString = Long.valueOf(expiracao);
         LocalDateTime dataHoraExpiracao = LocalDateTime.now().plusMinutes(expString);
         Date data = Date.from( dataHoraExpiracao.atZone( ZoneId.systemDefault() ).toInstant() );
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("nome", usuario.getNome());
+        String[] roles = usuario.isAdmin() ? new String[] {"ADMIN", "CLIENTE"} : new String[] {"CLIENTE"};
+        claims.put("roles", roles);
         return Jwts.builder()
+                .setClaims(claims)
                 .setSubject(usuario.getEmail())
                 .setExpiration(data)
                 .signWith(SignatureAlgorithm.HS512, chaveAssinatura)

@@ -16,6 +16,9 @@ import java.util.List;
 @Builder
 public class Usuario extends EntidadeBase {
 
+    @Column(name = "nome", unique = false, nullable = false)
+    private String nome;
+
     @Column(name = "email", unique = true, nullable = false)
     private String email;
 

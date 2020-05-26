@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EventoService {
+
     Evento save(Evento evento);
 
     Page<Evento> findAll(Example example, Pageable pageable);
@@ -23,5 +24,7 @@ public interface EventoService {
     Optional<Evento> findByIdAndStatus(Long id, StatusEvento status);
 
     Optional<Evento> findById(Long id);
+
+    Evento update(Evento evento);
 }
 

@@ -18,8 +18,8 @@ import java.util.List;
 public class Compra extends EntidadeBase {
 
     @ManyToOne
-    @JoinColumn(name = "cliente_id", nullable = false)
-    private Cliente cliente;
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
 
     @OneToMany(mappedBy = "compra", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<CompraEvento> compraEventos;

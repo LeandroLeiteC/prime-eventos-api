@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 public class EventoFORM {
 
     @NotEmpty(message = "Campo nome é obrigatório.")
+    @Size(max = 40, message = "Nome do evento deve ter nom máximo 40 caracteres.")
     private String nome;
 
     @NotEmpty(message = "Campo nome é obrigatório")
@@ -38,6 +39,7 @@ public class EventoFORM {
 
     @NotNull(message = "Campo ingressos disponíveis é obrigatório.")
     @Positive(message = "O número de ingresso disponíveis deve ser maior que 0 (zero).")
+    @Min(value = 10, message = "O mínimo são 10 ingressos.")
     private int ingressosDisponiveis;
 
     @NotNull(message = "Campo limite de ingressos por cliente é obrigatório.")

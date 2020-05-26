@@ -1,9 +1,7 @@
 package com.leandro.primeeventosapi;
 
-import com.leandro.primeeventosapi.domain.entity.Cliente;
 import com.leandro.primeeventosapi.domain.entity.Usuario;
-import com.leandro.primeeventosapi.domain.repository.ClienteRepository;
-import com.leandro.primeeventosapi.service.ClienteService;
+import com.leandro.primeeventosapi.domain.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
@@ -18,7 +16,7 @@ import java.io.File;
 public class PrimeEventosApiApplication {
 
     @Autowired
-    private ClienteRepository repository;
+    private UsuarioRepository repository;
     @Autowired
     private PasswordEncoder encoder;
 
@@ -41,15 +39,12 @@ public class PrimeEventosApiApplication {
             Usuario usuario = Usuario.builder()
                     .email(email.toLowerCase())
                     .password(encoder.encode(password))
+                    .nome(nome)
                     .admin(true)
                     .ativo(true)
                     .build();
 
-            Cliente cliente = Cliente.builder()
-                    .usuario(usuario)
-                    .nome(nome.toUpperCase())
-                    .build();
-            repository.save(cliente);
+            repository.save(usuario);
 
             System.out.println("");
             System.out.println("   ========= PRIME EVENTOS API =========");

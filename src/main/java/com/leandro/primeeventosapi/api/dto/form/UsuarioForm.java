@@ -12,6 +12,9 @@ import javax.validation.constraints.NotEmpty;
 @NoArgsConstructor
 public class UsuarioForm {
 
+    @NotEmpty(message = "Campo nome é obrigatório.")
+    private String nome;
+
     @NotEmpty(message = "Campo email é obrigatório.")
     @Email(message = "O email não possue formato válido.")
     private String email;
@@ -19,10 +22,4 @@ public class UsuarioForm {
     @NotEmpty(message = "Campo senha é obrigatório.")
     private String password;
 
-    @NotEmpty(message = "Campo confirmação de senha é obrigatório.")
-    private String confirmPassword;
-
-    public boolean senhaValida() {
-        return this.password.equals(this.confirmPassword);
-    }
 }

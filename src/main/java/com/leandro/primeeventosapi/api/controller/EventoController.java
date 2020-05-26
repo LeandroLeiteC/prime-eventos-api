@@ -75,7 +75,8 @@ public class EventoController {
     public EventoDTO updateEventoById(@PathVariable Long id, @RequestBody EventoFORM form){
         service.findById(id).orElseThrow(() -> new ObjetoNotFoundException("Evento não encontrado."));
         Evento evento = modelMapper.map(form, Evento.class);
-        service.save(evento);
+        evento.setId(id);
+        service.update(evento);
         return modelMapper.map(evento, EventoDTO.class);
     }
 
@@ -83,20 +84,24 @@ public class EventoController {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation("Buscar um evento por um filtro.")
     @ApiResponses({@ApiResponse(code = 200, message = "Evento(s) encontrado(s).")})
-    public Page<EventoDTO> getAllEventos(EventoFILTRO filtro, @PageableDefault(size = 5) Pageable pageable){
+    public Page<EventoDTO> getAllEventos(@RequestParam(required = false) String status, @PageableDefault(size = 6) Pageable pageable){
         ExampleMatcher matcher = ExampleMatcher
                                     .matching()
                                     .withIgnoreCase()
                                     .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
 
-        CasaDeShow casaDeShow = CasaDeShow.builder()
-                                    .nome(filtro.getCasaDeShow())
-                                    .cidade(filtro.getCidade())
-                                    .uf(filtro.getUf())
-                                    .bairro(filtro.getBairro())
-                                    .build();
+        Evento evento = new Evento();
 
-        Evento evento = Evento.builder().casaDeShow(casaDeShow).status(StatusEvento.ABERTO).build();
+        if(status != null){
+            status = status.toLowerCase();
+            if(status.equals("aberto")){
+                evento = Evento.builder().status(StatusEvento.ABERTO).build();
+            }
+
+            if(status.equals("oculto")){
+                evento = Evento.builder().status(StatusEvento.OCULTO).build();
+            }
+        }
 
         Example example = Example.of(evento, matcher);
 

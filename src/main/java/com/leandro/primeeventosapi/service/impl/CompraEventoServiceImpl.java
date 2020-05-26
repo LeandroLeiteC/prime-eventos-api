@@ -38,7 +38,7 @@ public class CompraEventoServiceImpl implements CompraEventoService {
             compraEvento.setId(null);
             AtomicReference<Integer> comprados = new AtomicReference<>(0);
 
-            List<Compra> compras = compraRepository.findAllByStatusAndClienteUsuarioEmail(StatusCompra.REALIZADO,compra.getCliente().getUsuario().getEmail());
+            List<Compra> compras = compraRepository.findAllByStatusAndUsuarioEmail(StatusCompra.REALIZADO,compra.getUsuario().getEmail());
 
             if(compras.size() > 0){
                 compras.forEach(c -> {

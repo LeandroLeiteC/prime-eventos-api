@@ -4,6 +4,7 @@ import com.leandro.primeeventosapi.api.dto.CasaDeShowDTO;
 import com.leandro.primeeventosapi.api.dto.filtro.CasaDeShowFILTRO;
 import com.leandro.primeeventosapi.api.dto.form.CasaDeShowFORM;
 import com.leandro.primeeventosapi.domain.entity.CasaDeShow;
+import com.leandro.primeeventosapi.domain.entity.Evento;
 import com.leandro.primeeventosapi.exception.ObjetoNotFoundException;
 import com.leandro.primeeventosapi.service.CasaDeShowService;
 import io.swagger.annotations.Api;
@@ -79,20 +80,27 @@ public class CasaDeShowController {
     @ResponseStatus(HttpStatus.OK)
     @ApiOperation("Buscar uma casa de show por um filtro.")
     @ApiResponses({@ApiResponse(code = 200, message = "Casa(s) de Show encontrada(s).")})
-    public Page<CasaDeShowDTO> findCasaDeShow(CasaDeShowFILTRO filtro, @PageableDefault(size = 5) Pageable pageable){
+    public Page<CasaDeShowDTO> findCasaDeShow(CasaDeShowFILTRO filtro, @PageableDefault(size = 6) Pageable pageable){
+
         ExampleMatcher matcher = ExampleMatcher
                 .matching()
                 .withIgnoreCase()
                 .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
 
-        CasaDeShow casaDeShow = modelMapper.map(filtro, CasaDeShow.class);
+        CasaDeShow casaDeShow = CasaDeShow.builder()
+                .nome(filtro.getNome())
+                .bairro(filtro.getBairro())
+                .cidade(filtro.getCidade())
+                .uf(filtro.getUf())
+                .build();
 
         Example example = Example.of(casaDeShow, matcher);
 
-        List<CasaDeShowDTO> result = service.findAll(example, pageable).stream()
+        Page<CasaDeShow> result = service.findAll(example ,pageable);
+        List<CasaDeShowDTO> casas = result.getContent().stream()
                 .map(c -> modelMapper.map(c, CasaDeShowDTO.class))
                 .collect(Collectors.toList());
 
-        return new PageImpl<CasaDeShowDTO>(result);
+        return new PageImpl<CasaDeShowDTO>(casas, pageable, result.getTotalElements());
     }
 }

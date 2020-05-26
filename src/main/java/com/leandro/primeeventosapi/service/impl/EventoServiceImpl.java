@@ -109,6 +109,11 @@ public class EventoServiceImpl implements EventoService {
         return repository.findById(id);
     }
 
+    @Override
+    public Evento update(Evento evento) {
+        return repository.save(evento);
+    }
+
     private String nomeDoArquivo(String nome, String tipo) {
         String novoNome = Timestamp.valueOf(LocalDateTime.now()).toString().concat(nome);
         String nomeBas64 = Base64.getEncoder().encodeToString(novoNome.getBytes());

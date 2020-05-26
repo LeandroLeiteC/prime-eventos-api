@@ -5,10 +5,9 @@ import com.leandro.primeeventosapi.domain.entity.CompraEvento;
 import com.leandro.primeeventosapi.domain.enums.StatusCompra;
 import com.leandro.primeeventosapi.domain.repository.CompraRepository;
 import com.leandro.primeeventosapi.exception.BussinesException;
-import com.leandro.primeeventosapi.service.ClienteService;
 import com.leandro.primeeventosapi.service.CompraEventoService;
 import com.leandro.primeeventosapi.service.CompraService;
-import com.leandro.primeeventosapi.service.EventoService;
+import com.leandro.primeeventosapi.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -25,7 +24,7 @@ import java.util.Optional;
 public class CompraServiceImpl implements CompraService {
 
     private final CompraRepository repository;
-    private final ClienteService clienteService;
+    private final UsuarioService usuarioService;
     private final CompraEventoService compraEventoService;
 
     @Override
@@ -33,7 +32,7 @@ public class CompraServiceImpl implements CompraService {
     public Compra save(Compra compra) {
 
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        compra.setCliente(clienteService.findByEmail(email)
+        compra.setUsuario(usuarioService.findByEmail(email)
                     .orElseThrow(() -> new BussinesException("Cliente não encontrado.")));
 
         compra.setId(null);
@@ -57,13 +56,13 @@ public class CompraServiceImpl implements CompraService {
     @Override
     @Transactional(readOnly = true)
     public Optional<Compra> findByIdAndClienteUsuarioEmail(Long id, String email) {
-        return repository.findByIdAndClienteUsuarioEmail(id, email);
+        return repository.findByIdAndUsuarioEmail(id, email);
     }
 
     @Override
     @Transactional(readOnly = true)
     public Page<Compra> findAllByEmail(Pageable pageable, String email) {
-        return repository.findAllByClienteUsuarioEmail(pageable, email);
+        return repository.findAllByUsuarioEmail(pageable, email);
     }
 
     @Override
