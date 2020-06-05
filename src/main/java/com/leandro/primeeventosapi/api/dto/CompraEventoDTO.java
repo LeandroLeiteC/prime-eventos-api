@@ -13,6 +13,6 @@ public class CompraEventoDTO {
 
     private EventoDTO evento;
     private Integer qtdIngresso;
-    private Double ValorUnitario;
+    private Double valorUnitario;
     private Double subtotal;
 }

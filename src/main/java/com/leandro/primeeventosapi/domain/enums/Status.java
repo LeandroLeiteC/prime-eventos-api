@@ -1,9 +1,9 @@
 package com.leandro.primeeventosapi.domain.enums;
 
-public enum StatusEvento {
+public enum Status {
     ABERTO(0), OCULTO(1);
 
 
-    StatusEvento(int i) {
+    Status(int i) {
     }
 }

@@ -1,6 +1,6 @@
 package com.leandro.primeeventosapi.api.dto;
 
-import com.leandro.primeeventosapi.domain.enums.StatusEvento;
+import com.leandro.primeeventosapi.domain.enums.Status;
 import lombok.*;
 import java.time.LocalDateTime;
 
@@ -20,7 +20,7 @@ public class EventoDTO {
     private Double preco;
     private String nomeImagemCard;
     private String nomeImagemBanner;
-    private StatusEvento status;
+    private Status status;
     private int ingressosDisponiveis;
     private int ingressosVendidos;
     private int limiteCliente;

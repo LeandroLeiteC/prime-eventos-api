@@ -10,7 +10,6 @@ import com.leandro.primeeventosapi.service.CompraService;
 import com.leandro.primeeventosapi.service.UsuarioService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,8 +60,8 @@ public class CompraServiceImpl implements CompraService {
 
     @Override
     @Transactional(readOnly = true)
-    public Page<Compra> findAllByEmail(Pageable pageable, String email) {
-        return repository.findAllByUsuarioEmail(pageable, email);
+    public List<Compra> findAllByEmail(String email) {
+        return repository.findAllByUsuarioEmail(email);
     }
 
     @Override
@@ -73,6 +72,12 @@ public class CompraServiceImpl implements CompraService {
             compraEvento.getEvento().setIngressosVendidos(compraEvento.getEvento().getIngressosVendidos() - compraEvento.getQtdIngresso());
         });
         compra.setStatus(StatusCompra.CANCELADO);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<CompraEvento> getCompraEventos(Compra compra) {
+        return compra.getCompraEventos();
     }
 
 }

@@ -1,5 +1,6 @@
 package com.leandro.primeeventosapi.domain.entity;
 
+import com.leandro.primeeventosapi.domain.enums.Status;
 import lombok.*;
 
 import javax.persistence.*;
@@ -40,6 +41,9 @@ public class CasaDeShow extends EntidadeBase {
 
     @Column(name = "telefone", nullable = false)
     private String telefone;
+
+    @Column(name = "status")
+    private Status status;
 
     @OneToMany(mappedBy = "casaDeShow", cascade = CascadeType.ALL)
     private List<Evento> eventos;

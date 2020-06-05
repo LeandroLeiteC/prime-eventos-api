@@ -16,7 +16,7 @@ public interface CompraRepository extends JpaRepository<Compra, Long> {
 //    @Query("select c from Compra c where c.status = :status and c.usuario.email = :email")
     List<Compra> findAllByStatusAndUsuarioEmail(StatusCompra status, String email);
 
-    Page<Compra> findAllByUsuarioEmail(Pageable pageable, String email);
+    List<Compra> findAllByUsuarioEmail(String email);
 
     Optional<Compra> findByIdAndUsuarioEmail(Long id, String email);
 

@@ -1,5 +1,6 @@
 package com.leandro.primeeventosapi.api.dto;
 
+import com.leandro.primeeventosapi.domain.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,4 +22,5 @@ public class CasaDeShowDTO {
     private Integer numero;
     private Integer limitePessoas;
     private String telefone;
+    private Status status;
 }

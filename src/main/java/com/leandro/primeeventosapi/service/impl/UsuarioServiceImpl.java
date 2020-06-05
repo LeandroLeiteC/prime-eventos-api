@@ -55,7 +55,6 @@ public class UsuarioServiceImpl implements UserDetailsService, UsuarioService {
     @Override
     @Transactional(readOnly = false)
     public Usuario save(Usuario usuario) {
-        usuario.setAdmin(false);
         usuario.setAtivo(true);
         return repository.save(usuario);
     }

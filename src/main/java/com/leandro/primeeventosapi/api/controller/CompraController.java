@@ -1,6 +1,7 @@
 package com.leandro.primeeventosapi.api.controller;
 
 import com.leandro.primeeventosapi.api.dto.CompraDTO;
+import com.leandro.primeeventosapi.api.dto.CompraEventoDTO;
 import com.leandro.primeeventosapi.api.dto.form.CompraEventoFORM;
 import com.leandro.primeeventosapi.domain.entity.Compra;
 import com.leandro.primeeventosapi.domain.entity.CompraEvento;
@@ -58,12 +59,23 @@ public class CompraController{
     }
 
     @Secured({"ROLE_ADMIN", "ROLE_CLIENTE"})
+    @GetMapping("{id}/compra-eventos")
+    @ApiOperation("Busca os itens de uma compra.")
+    @ApiResponses({@ApiResponse(code = 200, message = "Compra encontrada."), @ApiResponse(code = 404, message = "Compra não encontrada.")})
+    public List<CompraEventoDTO> getCompraEventosById(@PathVariable Long id){
+        String email = SecurityContextHolder.getContext().getAuthentication().getName();
+        Compra compra = compraService.findByIdAndClienteUsuarioEmail(id, email).orElseThrow(() -> new ObjetoNotFoundException("Compra não encontrada."));
+        List<CompraEvento> compraEventos = compraService.getCompraEventos(compra);
+        return compraEventos.stream().map( ce -> modelMapper.map(ce, CompraEventoDTO.class)).collect(Collectors.toList());
+    }
+
+    @Secured({"ROLE_ADMIN", "ROLE_CLIENTE"})
     @GetMapping
     @ApiOperation("Buscar uma compra por um filtro.")
     @ApiResponses({@ApiResponse(code = 200, message = "Compra(s) encontrada(s).")})
-    public Page<CompraDTO> getAllCompras(@PageableDefault(size = 5) Pageable pageable){
+    public Page<CompraDTO> getAllCompras(){
         String email = SecurityContextHolder.getContext().getAuthentication().getName();
-        List<CompraDTO> compras = compraService.findAllByEmail(pageable, email).stream()
+        List<CompraDTO> compras = compraService.findAllByEmail(email).stream()
                                     .map(c -> modelMapper.map(c, CompraDTO.class))
                                     .collect(Collectors.toList());
 

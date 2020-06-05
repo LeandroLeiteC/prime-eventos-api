@@ -2,7 +2,7 @@ package com.leandro.primeeventosapi.service.impl;
 
 import com.leandro.primeeventosapi.domain.entity.CasaDeShow;
 import com.leandro.primeeventosapi.domain.entity.Evento;
-import com.leandro.primeeventosapi.domain.enums.StatusEvento;
+import com.leandro.primeeventosapi.domain.enums.Status;
 import com.leandro.primeeventosapi.domain.repository.EventoRepository;
 import com.leandro.primeeventosapi.exception.BussinesException;
 import com.leandro.primeeventosapi.exception.ObjetoNotFoundException;
@@ -24,6 +24,7 @@ import java.nio.file.Paths;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Base64;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -49,7 +50,7 @@ public class EventoServiceImpl implements EventoService {
         }
         evento.setId(null);
         evento.setIngressosVendidos(0);
-        evento.setStatus(StatusEvento.ABERTO);
+        evento.setStatus(Status.ABERTO);
         evento.setCasaDeShow(casaDeShow);
         return repository.save(evento);
     }
@@ -66,8 +67,9 @@ public class EventoServiceImpl implements EventoService {
         Evento evento = repository.findById(id).orElseThrow(() -> new ObjetoNotFoundException("Evento não encontrado."));
         tipo = tipo.toLowerCase();
         try{
-            if(tipo.equals("card") && evento.getNomeImagemCard() != null){
+            if(tipo.equals("card") && evento.getNomeImagemCard() != null ){
                 Path path = Paths.get(PATH_FOTO, evento.getNomeImagemCard());
+                System.out.println(path.toString());
                 Files.delete(path);
             }
             if(tipo.equals("banner") && evento.getNomeImagemBanner() != null){
@@ -95,23 +97,44 @@ public class EventoServiceImpl implements EventoService {
 
     @Override
     @Transactional(readOnly = false)
-    public void updateStatus(Evento evento, StatusEvento status) {
+    public void updateStatus(Evento evento, Status status) {
         evento.setStatus(status);
     }
 
     @Override
-    public Optional<Evento> findByIdAndStatus(Long id, StatusEvento status) {
+    @Transactional(readOnly = true)
+    public Optional<Evento> findByIdAndStatus(Long id, Status status) {
         return repository.findByIdAndStatus(id, status);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Optional<Evento> findById(Long id) {
         return repository.findById(id);
     }
 
     @Override
+    @Transactional(readOnly = false)
     public Evento update(Evento evento) {
         return repository.save(evento);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Evento> findByCasaDeShowId(Long id) {
+        return repository.findByCasaDeShowId(id);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void delete(Evento evento) {
+        repository.delete(evento);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Evento> findAllById(List<Long> ids) {
+        return repository.findAllById(ids);
     }
 
     private String nomeDoArquivo(String nome, String tipo) {

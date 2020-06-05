@@ -18,6 +18,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -70,6 +71,27 @@ public class UsuarioController {
 
         Usuario usuario = modelMapper.map(form, Usuario.class);
         usuario.setId(null);
+        usuario.setAdmin(false);
+        usuario.setNome(usuario.getNome().toUpperCase());
+        usuario.setEmail(usuario.getEmail().toLowerCase());
+        usuario.setPassword(encoder.encode(usuario.getPassword()));
+        service.save(usuario);
+        return modelMapper.map(usuario, UsuarioDTO.class);
+    }
+
+    @Secured({"ROLE_ADMIN"})
+    @PostMapping("usuarios/admin")
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiOperation("Salvar um usuário admin.")
+    @ApiResponses({@ApiResponse(code = 201, message = "Usuario admin cadastrado."), @ApiResponse(code = 400, message = "Dado(s) inválido(s) ou email já cadastrado.")})
+    public UsuarioDTO saveUsuarioAdmin(@RequestBody @Valid UsuarioForm form){
+        if(service.findByEmail(form.getEmail()).isPresent()){
+            throw new BussinesException("Email já cadastrado.");
+        }
+
+        Usuario usuario = modelMapper.map(form, Usuario.class);
+        usuario.setId(null);
+        usuario.setAdmin(true);
         usuario.setNome(usuario.getNome().toUpperCase());
         usuario.setEmail(usuario.getEmail().toLowerCase());
         usuario.setPassword(encoder.encode(usuario.getPassword()));

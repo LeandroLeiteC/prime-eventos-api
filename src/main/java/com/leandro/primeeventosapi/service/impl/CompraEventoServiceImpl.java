@@ -2,7 +2,7 @@ package com.leandro.primeeventosapi.service.impl;
 
 import com.leandro.primeeventosapi.domain.entity.*;
 import com.leandro.primeeventosapi.domain.enums.StatusCompra;
-import com.leandro.primeeventosapi.domain.enums.StatusEvento;
+import com.leandro.primeeventosapi.domain.enums.Status;
 import com.leandro.primeeventosapi.domain.repository.CompraEventoRepository;
 import com.leandro.primeeventosapi.domain.repository.CompraRepository;
 import com.leandro.primeeventosapi.exception.BussinesException;
@@ -28,7 +28,7 @@ public class CompraEventoServiceImpl implements CompraEventoService {
     public List<CompraEvento> saveAll(List<CompraEvento> compraEventos, Compra compra) {
 
         compraEventos.forEach(compraEvento -> {
-            Evento evento = eventoService.findByIdAndStatus(compraEvento.getEvento().getId(), StatusEvento.ABERTO)
+            Evento evento = eventoService.findByIdAndStatus(compraEvento.getEvento().getId(), Status.ABERTO)
                     .orElseThrow(() -> new BussinesException("Evento não encontrado."));
 
             if(compraEvento.getQtdIngresso() <=0){

@@ -1,5 +1,6 @@
 package com.leandro.primeeventosapi.api.dto.form;
 
+import com.leandro.primeeventosapi.domain.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -46,4 +47,6 @@ public class EventoFORM {
     @Positive(message = "O número de ingressos por cliente deve ser maior que 0 (zero).")
     private int limiteCliente;
 
+    @NotNull(message = "Campo status é obrigatório.")
+    private Status status;
 }

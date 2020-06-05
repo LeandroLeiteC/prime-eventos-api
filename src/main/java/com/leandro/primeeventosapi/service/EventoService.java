@@ -1,8 +1,7 @@
 package com.leandro.primeeventosapi.service;
 
-import com.leandro.primeeventosapi.api.dto.EventoDTO;
 import com.leandro.primeeventosapi.domain.entity.Evento;
-import com.leandro.primeeventosapi.domain.enums.StatusEvento;
+import com.leandro.primeeventosapi.domain.enums.Status;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -19,12 +18,18 @@ public interface EventoService {
 
     void saveImage(MultipartFile foto, Long id, String tipo);
 
-    void updateStatus(Evento evento, StatusEvento status);
+    void updateStatus(Evento evento, Status status);
 
-    Optional<Evento> findByIdAndStatus(Long id, StatusEvento status);
+    Optional<Evento> findByIdAndStatus(Long id, Status status);
 
     Optional<Evento> findById(Long id);
 
     Evento update(Evento evento);
+
+    List<Evento> findByCasaDeShowId(Long id);
+
+    void delete(Evento evento);
+
+    List<Evento> findAllById(List<Long> ids);
 }
 

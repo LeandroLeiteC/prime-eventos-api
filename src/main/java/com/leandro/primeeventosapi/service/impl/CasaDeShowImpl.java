@@ -1,6 +1,7 @@
 package com.leandro.primeeventosapi.service.impl;
 
 import com.leandro.primeeventosapi.domain.entity.CasaDeShow;
+import com.leandro.primeeventosapi.domain.enums.Status;
 import com.leandro.primeeventosapi.domain.repository.CasaDeShowRepository;
 import com.leandro.primeeventosapi.service.CasaDeShowService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ public class CasaDeShowImpl implements CasaDeShowService {
     @Override
     @Transactional(readOnly = false)
     public CasaDeShow save(CasaDeShow casaDeShow) {
+        casaDeShow.setStatus(Status.ABERTO);
         return repository.save(casaDeShow);
     }
 
@@ -42,5 +44,16 @@ public class CasaDeShowImpl implements CasaDeShowService {
     @Transactional(readOnly = true)
     public Page<CasaDeShow> findAll(Example example, Pageable pageable) {
         return repository.findAll(example, pageable);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void updateStatus(CasaDeShow casaDeShow, Status status) {
+        casaDeShow.setStatus(status);
+    }
+
+    @Override
+    public CasaDeShow update(CasaDeShow form) {
+        return repository.save(form);
     }
 }

@@ -1,10 +1,7 @@
 package com.leandro.primeeventosapi.domain.entity;
 
-import com.leandro.primeeventosapi.domain.enums.StatusEvento;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import com.leandro.primeeventosapi.domain.enums.Status;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -16,6 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Getter
 @Setter
+@ToString
 public class Evento extends EntidadeBase {
 
     @Column(name = "nome", nullable = false)
@@ -53,7 +51,7 @@ public class Evento extends EntidadeBase {
     private String nomeImagemBanner;
 
     @Column(name = "status")
-    private StatusEvento status;
+    private Status status;
 
     public Evento() {
         super();
